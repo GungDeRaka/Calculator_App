@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'my_button.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -8,13 +10,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String result = "0";
+  String result = "";
   String number = "";
   String operator = "";
   String btnText = "";
   List<String> btnList = [
     'C',
-    '+/-',
+    '⌫',
     '%',
     '÷',
     '7',
@@ -31,11 +33,9 @@ class _MainScreenState extends State<MainScreen> {
     '-',
     '.',
     '0',
-    "⌫",
+    "00",
     '=',
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,9 @@ class _MainScreenState extends State<MainScreen> {
                   children: [
                     Text(
                       number,
+                      textAlign: TextAlign.right,
                       style: TextStyle(
+                        
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
                       ),
@@ -107,43 +109,27 @@ class _MainScreenState extends State<MainScreen> {
                 shrinkWrap: true,
                 physics: const ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  btnText = btnList[index];
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: (btnText == "=")
-                          ? Colors.red[700]
-                          : (btnText == "+" ||
-                                  btnText == "-" ||
-                                  btnText == "x" ||
-                                  btnText == "÷")
-                              ? Colors.amber[700]
-                              : (btnText == "C" ||
-                                      btnText == "+/-" ||
-                                      btnText == "%" ||
-                                      btnText == "." ||
-                                      btnText == "⌫")
-                                  ? Colors.blueGrey[300]
-                                  : Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
-                      ),
-                    ),
-                    onPressed: () {
-                      (btnText != "C" ||btnText != "⌫" ||btnText != "+/-" ||btnText != "=")?
-                      number = number.padRight(number.length+1,btnList[index]):number = number;
-                      setState(() {
-                        
-                      });
-                    },
-                    child: Text(
-                      btnText,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
+                  return (index == 0)
+                      ? MyButton(
+                          btnText: btnList[index],
+                          onPressed: () {
+                            number = "";
+                            setState(() {});
+                          },
+                        )
+                      : (index == 1) ? MyButton(
+                          btnText: btnList[index],
+                          onPressed: () {
+                            number = number.substring(0,number.length -1);
+                            setState(() {});
+                          }, 
+                        ): MyButton(
+                          btnText: btnList[index],
+                          onPressed: () {
+                            number += btnList[index];
+                            setState(() {});
+                          },
+                        );
                 },
               ),
             ),
@@ -155,25 +141,6 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-    void count(){
-    num firstNum = num.parse(number.substring(0, number.indexOf(operator)));
-    num secondNum = num.parse(number.substring(number.indexOf(operator)+1));
-    if(btnText == "+"){
-      operator= "+";
-      result = (firstNum + secondNum).toString();
-    }
-    else if(btnText == "-"){
-      operator= "-";
-      result = (firstNum - secondNum).toString();
-    }
-    else if(btnText == "x"){
-      operator= "x";
-      result = (firstNum * secondNum).toString();
-    }
-    else if(btnText == "÷"){
-      operator= "÷";
-      result = (firstNum / secondNum).toString();
-    }
 
-  }
+  
 }
