@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:math_expressions/math_expressions.dart';
 import 'my_button.dart';
 
 class MainScreen extends StatefulWidget {
@@ -10,10 +10,11 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String result = "";
+  /// Setelah di klik, nilai string pada tombol kalkulator akan disimpan pada [number]
   String number = "";
-  String operator = "";
-  String btnText = "";
+  /// Hasil dari perhitungan aritmatika akan disimpan pada [result]
+  String result = "";
+  /// [btnList] Memberi nama pada tombol-tombol kalkulator
   List<String> btnList = [
     'C',
     '⌫',
@@ -49,12 +50,13 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(
               height: 12.0,
             ),
+            //? Container untuk menampilkan [result] dan [number] pada layar
             Container(
               width: size.width * 0.95,
               height: size.height * 0.3,
               margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
               decoration: BoxDecoration(
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.white,
                       blurRadius: 12,
@@ -69,23 +71,32 @@ class _MainScreenState extends State<MainScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      number,
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
+                    //* Widget ini akan menampilkan string number ke layar
+                    Hero(
+                      tag: 'count',
+              
+                      child: Text(
+                        number,
+                        textAlign: TextAlign.right,
+                        style: const TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 4.0,
                     ),
-                    Text(
-                      result,
-                      style: TextStyle(
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.bold,
+                    //* Widget ini akan menampilkan string hasil 
+                    //* perhitungan aritmatik dari number ke layar
+                    Hero(
+                      tag: 'count',
+                      child: Text(
+                        result,
+                        style: const TextStyle(
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -109,27 +120,44 @@ class _MainScreenState extends State<MainScreen> {
                 shrinkWrap: true,
                 physics: const ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
+                  //? tombol "C" (clear) mengubah number dan result menjadi string kosong
                   return (index == 0)
                       ? MyButton(
                           btnText: btnList[index],
                           onPressed: () {
                             number = "";
+                            result = '';
                             setState(() {});
                           },
                         )
-                      : (index == 1) ? MyButton(
-                          btnText: btnList[index],
-                          onPressed: () {
-                            number = number.substring(0,number.length -1);
-                            setState(() {});
-                          }, 
-                        ): MyButton(
-                          btnText: btnList[index],
-                          onPressed: () {
-                            number += btnList[index];
-                            setState(() {});
-                          },
-                        );
+                        //? tombol backspace untuk menghapus index terakhir pada number
+                      : (index == 1)
+                          ? MyButton(
+                              btnText: btnList[index],
+                              onPressed: () {
+                                number = number.substring(0, number.length - 1);
+                                result = "";
+                                setState(() {});
+                              },
+                            )
+                            //? tombol sama dengan. "="
+                          : (index == btnList.length - 1)
+                              ? MyButton(
+                                  btnText: btnList[index],
+                                  onPressed: () {
+                                    onEqualPressed(number);
+                                    number = "";
+                                    setState(() {});
+                                  },
+                                )
+                                //? tombol-tombol lainnya yang hanya digunakan untuk menambahkan number
+                              : MyButton(
+                                  btnText: btnList[index],
+                                  onPressed: () {
+                                    number += btnList[index];
+                                    setState(() {});
+                                  },
+                                );
                 },
               ),
             ),
@@ -142,5 +170,16 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  
+/// [onEqualPressed] setelah tombol sama dengan di tekan, fungsi ini akan dipanggil
+/// fungsi ini akan melakukan perhitungan aritmatika dari [number] dan menyimpan hasilnya pada [result]
+  Future<void> onEqualPressed(String count) async {
+    count = count.replaceAll("x", "*");
+    count = count.replaceAll("÷", "/");
+
+    Parser p = Parser();
+    Expression exp = p.parse(count);
+    ContextModel cm = ContextModel();
+    double eval = exp.evaluate(EvaluationType.REAL, cm);
+    result = eval.toString();
+  }
 }

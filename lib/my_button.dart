@@ -8,8 +8,10 @@ class MyButton extends StatelessWidget {
     required this.onPressed,
   }) : super(key: key);
 
+/// [btnText] Memberi simbol atau nama pada [MyButton] dalam bentuk string pada widget Text()
   final String btnText;
-  final Function() onPressed;
+/// [onPressed] Memanggil suatu fungsi ketika [MyButton] ditekan
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
