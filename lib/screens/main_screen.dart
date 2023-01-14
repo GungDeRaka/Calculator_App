@@ -185,7 +185,6 @@ class _MainScreenState extends State<MainScreen> {
       result = eval.toString();
     } catch (e) {
       number = "Kalkulatornya error gaess. Kalkulator ini belum sempurna :')";
-      
     }
   }
 }

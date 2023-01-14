@@ -1,16 +1,15 @@
-# my_calculator_app
+# Calculator App
 
-A new Flutter project.
+### Just an ordinary calculator app.
+ I made this project repository just try to learn about Provider State Management. I have to dive more deeper about Provider.
 
-## Getting Started
+There are 2 kind of calculator in this Repository. For the first calculator i made with state management setState() on StatefulWidget. And i made another calculator with Provider State Management.
 
-This project is a starting point for a Flutter application.
+----
 
-A few resources to get you started if this is your first Flutter project:
+## Here are the link that lead to the code file:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 1) [Calculator with state management setState](/lib/screens/main_screen.dart). The  logic and UI view are written in the same file
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 2) [Calculator with Provider state management](/lib/screens/calculator_with_controller.dart). I wrote the [controller](/lib/controller/calculator_controller.dart) and the [UI view](/lib/screens/calculator_with_controller.dart) in sparate files
+

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 class CalculatorWithController extends StatelessWidget {
   const CalculatorWithController({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -17,7 +16,7 @@ class CalculatorWithController extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(
-            height: 8.0,
+              height: 8.0,
             ),
             Container(
               width: size.width * 0.95,
@@ -59,7 +58,7 @@ class CalculatorWithController extends StatelessWidget {
                     //* Widget ini akan menampilkan string hasil
                     //* perhitungan aritmatik dari number ke layar
                     Consumer<CalculatorController>(
-                      builder: (context, controller, child) =>Hero(
+                      builder: (context, controller, child) => Hero(
                         tag: 'count',
                         child: Text(
                           controller.result,
@@ -91,41 +90,66 @@ class CalculatorWithController extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     var btnList = controller.btnList;
                     //? tombol "C" (clear) mengubah number dan result menjadi string kosong
-                    return  (index == 0)
-                      ? CalculatorButton(
-                          btnText: btnList[index],
-                          onPressed: () {
-                            controller.clear();
-                          },
-                        )
-                      //? tombol backspace untuk menghapus index terakhir pada number
-                      : (index == 1)
-                          ? CalculatorButton(
-                              btnText: btnList[index],
-                              onPressed: () {
-                               
-                              },
-                            )
-                          //? tombol sama dengan. "="
-                          : (index == btnList.length - 1)
-                              ? CalculatorButton(
-                                  btnText: btnList[index],
-                                  onPressed: () {
-                                    
-                                  },
-                                )
-                              //? tombol-tombol lainnya yang hanya digunakan untuk menambahkan number
-                              : CalculatorButton(
-                                  btnText: btnList[index],
-                                  onPressed: () {
-                                    controller.buttonsPressed(index);
-                                  },
-                                );  },
+                    return (index == 0)
+                        ? CalculatorButton(
+                            btnText: btnList[index],
+                            onPressed: () {
+                              controller.clear();
+                            },
+                          )
+                        //? tombol backspace untuk menghapus index terakhir pada number
+                        : (index == 1)
+                            ? CalculatorButton(
+                                btnText: btnList[index],
+                                onPressed: () {
+                                  if (controller.result.isEmpty) {
+                                    controller.backspace();
+                                  } else if (controller.result.isNotEmpty) {
+                                    controller.result = "";
+                                  }
+                                },
+                              )
+                            : ((index + 1) % 4 == 0 &&
+                                    index != btnList.length - 1)
+                                ? CalculatorButton(
+                                    btnText: btnList[index],
+                                    onPressed: () {
+                                      if (controller.result.isEmpty) {
+                                        controller.buttonsPressed(index);
+                                      } else if (controller.result.isNotEmpty) {
+                                        controller.number = controller.result;
+                                        controller.result = "";
+                                        controller.buttonsPressed(index);
+                                      }
+                                    },
+                                  )
+                                //? tombol sama dengan. "="
+                                : (index == btnList.length - 1)
+                                    ? CalculatorButton(
+                                        btnText: btnList[index],
+                                        onPressed: () {
+                                          controller.onEqualPressed();
+                                        },
+                                      )
+                                    //? tombol-tombol lainnya yang hanya digunakan untuk menambahkan number
+                                    : CalculatorButton(
+                                        btnText: btnList[index],
+                                        onPressed: () {
+                                          if (controller.result.isEmpty) {
+                                            controller.buttonsPressed(index);
+                                          } else if (controller
+                                              .result.isNotEmpty) {
+                                            controller.clear();
+                                            controller.buttonsPressed(index);
+                                          }
+                                        },
+                                      );
+                  },
                 ),
               ),
             ),
             const SizedBox(
-              height: 12.0,
+              height: 4.0,
             ),
           ],
         ),

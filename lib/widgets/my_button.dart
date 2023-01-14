@@ -8,9 +8,10 @@ class MyButton extends StatelessWidget {
     required this.onPressed,
   }) : super(key: key);
 
-/// [btnText] Memberi simbol atau nama pada [MyButton] dalam bentuk string pada widget Text()
+  /// [btnText] Memberi simbol atau nama pada [MyButton] dalam bentuk string pada widget Text()
   final String btnText;
-/// [onPressed] Memanggil suatu fungsi ketika [MyButton] ditekan
+
+  /// [onPressed] Memanggil suatu fungsi ketika [MyButton] ditekan
   final void Function() onPressed;
 
   @override
@@ -25,7 +26,6 @@ class MyButton extends StatelessWidget {
                     btnText == "÷")
                 ? Colors.amber[700]
                 : (btnText == "C" ||
-                        
                         btnText == "%" ||
                         btnText == "." ||
                         btnText == "⌫")
